@@ -259,7 +259,7 @@ class ScaffyDB:
     def getpos(self, key):
         """Get the byte position of a key in the database and the size of its value.
 
-        Returns: (position, size) tuple if succeeded, None if failed.
+        Returns: (position, size) tuple. "pos" is -1 if failed.
         """
         pos = -1
         psz = 0
@@ -341,10 +341,13 @@ if __name__ == "__main__":
 
     # Setup command line options.
     parser.add_argument("filename", nargs='?', type=str, help="database file to open")
-    parser.add_argument("--dump", action="store_true", dest="dump", help="dump key hashes and values")
-    parser.add_argument("--get", nargs=1, dest="get", type=str, metavar="<key>", help="get value by key")
-    parser.add_argument("--put", nargs=2, dest="put", type=str, metavar=("<key>", "<value>"), help="put value by key")
-    parser.add_argument("--remove", nargs=1, dest="remove", type=str, metavar="<key>", help="remove key")
+
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--dump", action="store_true", dest="dump", help="dump key hashes and values")
+    group.add_argument("--get", nargs=1, dest="get", type=str, metavar="<key>", help="get value by key")
+    group.add_argument("--put", nargs=2, dest="put", type=str, metavar=("<key>", "<value>"), help="put value by key")
+    group.add_argument("--remove", nargs=1, dest="remove", type=str, metavar="<key>", help="remove key")
+
     parser.add_argument("--quiet", action="store_true", dest="quiet", help="do not print failure messages")
     parser.add_argument("--version", action="store_true", dest="version", help="print the version string")
 
