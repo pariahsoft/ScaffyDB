@@ -72,7 +72,7 @@ class ScaffyDB:
         return inst
 
     def __contains__(self, item):
-        if self.__get_pos(item)[0] >= 0:
+        if self.getpos(item)[0] >= 0:
             return True
         return False
 
@@ -190,7 +190,7 @@ class ScaffyDB:
             return False
 
         # Try to find the position in the file of the key if it exists.
-        pos, psz = self.__get_pos(key)
+        pos, psz = self.getpos(key)
 
         # The key exists already, replace its value.
         if pos >= 0:
@@ -233,7 +233,7 @@ class ScaffyDB:
             return False
 
         # Try to find the position in the file of the key if it exists.
-        pos, psz = self.__get_pos(key)
+        pos, psz = self.getpos(key)
 
         # The key exists, remove it.
         if pos >= 0:
@@ -256,7 +256,7 @@ class ScaffyDB:
         else:
             return False
 
-    def __get_pos(self, key):
+    def getpos(self, key):
         """Get the byte position of a key in the database and the size of its value.
 
         Returns: (position, size) tuple if succeeded, None if failed.
