@@ -63,7 +63,7 @@ class ScaffyDB:
 
         inst.filename = filename
 
-        inst.__magic = "ScaffyDB01".encode("utf-8")  # Magic header.
+        inst.__magic = "ScaffyDB01".encode()  # Magic header.
 
         # Make sure the database is accessible.
         if not inst.__test_open():
@@ -127,7 +127,7 @@ class ScaffyDB:
                 stored_key, sz = struct.unpack(">QH", block)
 
                 # Retrieve the value.
-                dump.append((stored_key, dbfile.read(sz).decode("utf-8")))
+                dump.append((stored_key, dbfile.read(sz).decode()))
 
         return tuple(dump)
 
@@ -160,7 +160,7 @@ class ScaffyDB:
 
                 # Retrieve the value.
                 if self.hash(key) == stored_key:
-                    return dbfile.read(sz).decode("utf-8")
+                    return dbfile.read(sz).decode()
 
                 # Skip the value and keep looking.
                 else:
@@ -201,7 +201,7 @@ class ScaffyDB:
                     tmpfile.write(self.__magic)
                     tmpfile.write(dbfile.read(pos))
                     tmpfile.write(struct.pack(">QH", self.hash(key), len(value)))
-                    tmpfile.write(value.encode("utf-8"))
+                    tmpfile.write(value.encode())
                     dbfile.seek(10+psz, 1)
                     tmpfile.write(dbfile.read())
 
@@ -213,7 +213,7 @@ class ScaffyDB:
         else:
             with open(self.filename, "ab") as dbfile:
                 dbfile.write(struct.pack(">QH", self.hash(key), len(value)))
-                dbfile.write(value.encode("utf-8"))
+                dbfile.write(value.encode())
 
         return True
 
