@@ -31,7 +31,7 @@ import struct
 import sys
 
 
-VERSION = "ScaffyDB v0.1.0"
+VERSION = "ScaffyDB v0.1.1"
 COPYRIGHT = "Copyright 2014 PariahSoft LLC"
 
 
