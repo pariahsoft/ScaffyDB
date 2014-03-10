@@ -64,6 +64,7 @@ class ScaffyDB:
         inst.filename = filename
 
         inst.__magic = "ScaffyDB01".encode()  # Magic header.
+        inst.__strpad = "ohscaffy"
 
         # Make sure the database is accessible.
         if not inst.__test_open():
@@ -96,7 +97,7 @@ class ScaffyDB:
         Returns: A 64-bit integer hash.
         """
         h = 0
-        string += "ohscaffy"  # Pad the end of the string to increase variety.
+        string += self.__strpad  # Pad the end of the string to increase variety.
 
         # A product-addition and left-shift hash routine using empirically effective values.
         for i in range(len(string)):
@@ -272,7 +273,7 @@ class ScaffyDB:
 
                 # Read the key hash and value size.
                 block = dbfile.read(10)
-                if not block:
+                if not block or len(block) != 10:
                     break
 
                 # Unpack the key hash and value size.
@@ -312,19 +313,17 @@ class ScaffyDB:
         """
         try:
             # Read the magic header.
-            test = open(self.filename, "ab+")
-            test.seek(0)
-            magic = test.read(len(self.__magic))
+            with open(self.filename, "ab+") as test:
+                test.seek(0)
+                magic = test.read(len(self.__magic))
 
-            # New file, add magic header.
-            if not magic:
-                test.write(self.__magic)
-                test.close()
+                # New file, add magic header.
+                if not magic:
+                    test.write(self.__magic)
 
-            # Wrong magic header.
-            elif magic != self.__magic:
-                test.close()
-                return False
+                # Wrong magic header.
+                elif magic != self.__magic:
+                    return False
 
         except ():
             return False
